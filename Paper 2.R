@@ -15,11 +15,13 @@ require(genpathmox)
 library(plspm)
 library(tester)
 library(pathmox)
+install.packages("devtools")
 library(devtools)
 library(usethis)
 library(genpathmox)
 #getting data into R 
-mydata=read.table("C:/Users/bwabo/OneDrive/Desktop/Public Money/Governace 3.csv",header = T,sep = ",", stringsAsFactors = FALSE )
+mydata=read.table("C:/Users/bwabo/OneDrive/Desktop/Public Money/Governace3.csv",header = T,sep = ",", stringsAsFactors = FALSE )
+str(mydata)
 #Model A
 #path matrix 
 Transparency =rep(0,4)
@@ -34,13 +36,13 @@ Gov_path
 innerplot(Gov_path)
 #outer model 
 # list of blocks (outer model)
-Gov_blocks =list(4:12, 13:20, 30:37, 38:44)
+Gov_blocks =list(1:9, 10:27, 27:34, 35:41)
 
 # vector of reflective modes
 Gov_modes =rep("A",4)
 
 # apply plspm
-Govpls = plspm(Governace_3, Gov_path, Gov_blocks, modes = Gov_modes, scheme="centroid", scaled=FALSE)
+Govpls = plspm(mydata, Gov_path, Gov_blocks, modes = Gov_modes, scheme="centroid", scaled=FALSE)
 #what's in Gov_pls?
 Govpls
 summary(Govpls)
@@ -54,7 +56,7 @@ summary(Govpls)
 # plotting results (inner model)
 plot(Govpls)
 # running bootstrap validation 
-Gov_val = plspm(Governace_3, Gov_path, Gov_blocks, modes = Gov_modes, boot.val = TRUE, br = 5000)
+Gov_val = plspm(mydata, Gov_path, Gov_blocks, modes = Gov_modes, boot.val = TRUE, br = 5000)
 # bootstrap results 
 Gov_val$boot
 #Model B
