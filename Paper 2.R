@@ -56,7 +56,7 @@ summary(Govpls)
 # plotting results (inner model)
 plot(Govpls)
 # running bootstrap validation 
-Gov_val = plspm(mydata, Gov_path, Gov_blocks, modes = Gov_modes, boot.val = TRUE, br = 5000)
+Gov_val = plspm(mydata,Gov_path, Gov_blocks, modes = Gov_modes, boot.val = TRUE, br = 5000)
 # bootstrap results 
 Gov_val$boot
 #Model B
