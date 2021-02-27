@@ -59,12 +59,26 @@ plot(Govpls)
 Gov_val = plspm(mydata,Gov_path, Gov_blocks, modes = Gov_modes, boot.val = TRUE, br = 5000)
 # bootstrap results
 Gov_val[["boot"]]
+Gov_val[["model"]]
 Gov_val$boot$paths
 Gov_val$boot$loadings
 Gov_val$boot$total.efs
 print(Gov_val)
 Gov_val[["manifests"]]
 plot(Gov_val)
+#install excel for exporting the data
+require(writexl)
+install.packages("writexl")
+library(readxl)
+library(writexl)
+# 
+write.excel <- function(x,row.names=FALSE,col.names=TRUE,...) {
+  write.table(x,"clipboard",sep="\t",row.names=row.names,col.names=col.names,...)
+}
+read.excel <- function(header=TRUE,...) {
+  read.table("clipboard",sep="\t",header=header,...)
+}
+
 #Model B
 # duplicate Governance 3 as Governance 1
 mydata = Governace_3
