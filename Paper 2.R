@@ -225,26 +225,29 @@ female_value_pls =plspm(female, value_path, value_blocks, modes = value_modes)
 female_val=plspm(female,value_path, value_blocks, modes=value_modes, boot.val=TRUE,br=5000)
 female_val
 summary(female_val)
+#Measurement Model Test Estimation (Invariaences)
+# apply pls-pm.groups permutation
+value_perm =plspm.groups(value_pls, Governance1$Gender, method ="permutation")
 # Gender (male & Female) 
 male = Governance1[Governance1$Gender =="MALE", ]
-#male plspm
+#male pls-pm
 male_value_pls =plspm(male, value_path, value_blocks, modes = value_modes)
 male_val=plspm(male,value_path, value_blocks, modes=value_modes, boot.val=TRUE,br=5000)
 male_val
 summary(male_val)
 # Invoke as.factor method on dataframe$columnName
 Governance1$Gender = as.factor(Governance1$Gender)
-# apply plspm.groups premutation
-value_perm =plspm.groups(value_pls, Governance1$Gender, method ="permutation")
-
 # see the results
 value_perm
 # plotting results (inner model)
 plot(value_pls, arr.pos = 0.35)
+#Measurement Model Estimation (Invariances)  
+# apply pls-pm.groups permutation on Age 
+prod_pls_perm =plspm.groups(prod_pls, Governance1$Age, method ="permutation")
 # select data for Age (Junior|Senior) 
 Junior = Governance1[Governance1$Age =="JUNIOR",]
 senior = Governance1[Governance1$Age=="SENIOR",]
-# female plspm
+# female pls-pm
 junior_prod_pls =plspm(Junior, prod_path, prod_blocks,modes = prod_modes)
 summary(junior_prod_pls)
 junior_val=plspm(Junior,prod_path, prod_blocks,modes = prod_modes, boot.val=TRUE,br=5000)
@@ -256,8 +259,6 @@ summary(senior_prod_pls)
 senior_val=plspm(senior,prod_path, prod_blocks,modes = prod_modes, boot.val=TRUE,br=5000)
 junior_val
 summary(senior_val)
-# apply plspm.groups premutation on Age 
-prod_pls_perm =plspm.groups(prod_pls, Governance1$Age, method ="permutation")
 # matrix of path coefficients
 Paths = value_pls$path_coefs
 arrow_lwd = 10 *round(Paths, 2)
