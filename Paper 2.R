@@ -15,7 +15,9 @@ require(genpathmox)
 library(plspm)
 library(tester)
 library(pathmox)
+install.packages("ps")
 install.packages("devtools")
+library(ps)
 library(devtools)
 library(usethis)
 library(genpathmox)
@@ -80,8 +82,10 @@ read.excel <- function(header=TRUE,...) {
 }
 
 #Model B
+str(mydata)
+summary(mydata)
 # duplicate Governance 3 as Governance 1
-mydata = Governace_3
+mydata = Governance1
 #create a product indicator between Transparency and Legal
 #T1
 Governance1$inter1 = mydata$T1 * mydata$L1
@@ -178,7 +182,7 @@ prod_path =rbind(r1, r2, r3, r4,r5)
 rownames(prod_path) =c("Transparency","Inter","Accountabiliy","Legal","Value")
 colnames(prod_path) =c("Transparency","Inter","Accountabiliy","Legal","Value")
 # define outer model list
-prod_blocks =list(4:12, 45:115,13:20, 30:37,38:44)
+prod_blocks =list(1:9, 45:115,10:17,27:34,35:41)
 # define reflective indicators
 prod_modes =rep("A", 5)
 
@@ -204,7 +208,7 @@ Value=c(1,1,1,1,0)
 value_path =rbind(Transparency, Inter, Accountability, Legal,Value)
 
 # list of blocks (outer model)
-value_blocks =list(4:12, 45:115, 13:20,30:37, 38:44)
+value_blocks =list(1:9, 45:115,10:17,27:34,35:41)
 
 # vector of reflective modes
 value_modes =rep("A", 5)
@@ -212,14 +216,21 @@ value_modes =rep("A", 5)
 # apply plspm
 value_pls =plspm(Governance1, value_path, value_blocks, modes = value_modes,
                  boot.val = TRUE)
+value_pls
+summary(value_pls)
 # plot path coefficients
 plot(value_pls)
 
 # bootstrapped path coefficients
 value_pls$boot$paths
-# select data of female 
+# select data of female
+str(Governance1)
+# Invoke as.factor method on dataframe$columnName
+Governance1$Gender = as.factor(Governance1$Gender)
+Governance1$Age=as.factor(Governance1$Age)
+female=Governance1[Governance1$Gender== "FEMALE ",]
 female = Governance1[Governance1$Gender =="FEMALE", ]
-
+male = Governance1[Governance1$Gender =="MALE", ]
 # female plspm
 female_value_pls =plspm(female, value_path, value_blocks, modes = value_modes)
 female_val=plspm(female,value_path, value_blocks, modes=value_modes, boot.val=TRUE,br=5000)
@@ -229,14 +240,13 @@ summary(female_val)
 # apply pls-pm.groups permutation
 value_perm =plspm.groups(value_pls, Governance1$Gender, method ="permutation")
 # Gender (male & Female) 
-male = Governance1[Governance1$Gender =="MALE", ]
+
 #male pls-pm
 male_value_pls =plspm(male, value_path, value_blocks, modes = value_modes)
 male_val=plspm(male,value_path, value_blocks, modes=value_modes, boot.val=TRUE,br=5000)
 male_val
 summary(male_val)
-# Invoke as.factor method on dataframe$columnName
-Governance1$Gender = as.factor(Governance1$Gender)
+
 # see the results
 value_perm
 # plotting results (inner model)
